@@ -11,7 +11,7 @@ from idlelib.tooltip import Hovertip
 
 
 def btn_execute():
-    folder_path = tbx_table.get("1.0", "end-1c").replace('\\', '/')
+    folder_path = tbx_table.get("1.0", "end-1c")
     input_files_list = [f.replace('\\', '/') for f in glob(f"{folder_path}/*.xlsx")]
     sheet = tbx_sheet.get("1.0", "end-1c")
     cols = ["A,B,C,F:" + col for col in tbx_lastcol.get("1.0", "end-1c").split(sep=',')]
@@ -29,16 +29,16 @@ def btn_execute():
               "Dispatch": "dispatch_number"}
 
     if folder_path == '' or sheet == '' or cols == '':
-        messagebox.showerror('Atenção', "Por favor, preencha todos os campos")
+        messagebox.showerror('Erro', "Por favor, preencha todos os campos!")
     elif len(input_files_list) != len(cols):
-        messagebox.showerror('Atenção', f"O número de colunas não é igual ao número de arquivos na pasta {folder_path}")
+        messagebox.showerror('Erro', f"O número de últimas colunas não é igual ao número de arquivos na pasta {folder_path}.")
     else:
         for in_f, c, out_f in zip(input_files_list, cols, output_files_list):
             df = pd.read_excel(in_f, sheet_name=sheet, header=0, usecols=c)
             stacked = data_handler.stack_data_frame(df, index, rename)
             data_handler.column_name_manipulation(stacked)
             stacked.to_csv(out_f, encoding='cp1252')
-        messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}!')
+        messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
 
 ######################################################################################
 # ------------------------------------ Interface ----------------------------------- #
