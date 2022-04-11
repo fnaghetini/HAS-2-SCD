@@ -30,6 +30,8 @@ def btn_execute():
 
     if folder_path == '' or sheet == '' or cols == '':
         messagebox.showerror('Erro', "Por favor, preencha todos os campos!")
+    elif len(input_files_list) == 0:
+        messagebox.showerror('Erro', f"Não há arquivos .xlsx na pasta {folder_path}.")
     elif len(input_files_list) != len(cols):
         messagebox.showerror('Erro', f"O número de últimas colunas não é igual ao número de arquivos na pasta {folder_path}.")
     else:
@@ -40,10 +42,10 @@ def btn_execute():
             stacked.to_csv(out_f, encoding='cp1252')
         messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
 
+
 ######################################################################################
 # ------------------------------------ Interface ----------------------------------- #
 ######################################################################################
-
 
 # Criação da janela principal
 root = Tk()
