@@ -1,3 +1,4 @@
+from datetime import date
 
 
 def stack_data_frame(df, index, rename):
