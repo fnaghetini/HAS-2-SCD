@@ -1,12 +1,3 @@
-#encoding: utf-8
-import pandas as pd
-# import progressbar
-from datetime import date
-
-# bar = progressbar.ProgressBar(maxval=df.shape[0], widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
-# bar.start()
-# bar.update(index)
-# bar.finish()
 
 
 def stack_data_frame(df, index, rename):
