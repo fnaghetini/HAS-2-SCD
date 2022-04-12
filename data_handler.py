@@ -11,8 +11,6 @@ def stack_data_frame(df, index, rename):
 
 
 def column_name_manipulation(df):
-    # standard_code   lab_reference_number    analysis_date   dispatch_number date_shipped
-    # df['standard_code'] = df['Standard id']
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)

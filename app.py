@@ -9,6 +9,17 @@ from idlelib.tooltip import Hovertip
 # ------------------------------------- Função ------------------------------------- #
 ######################################################################################
 
+# TODO: std_standard_code não está presente no script
+# TODO: nova regra para coluna parent_sample_number
+# TODO: remover colunas date_shipped, Lab, date_received, lab_analytical_method, sample_status, standard_min_value, standard_max_value, standard_deviation
+# TODO: alterar sufixos da coluna column_name para "_LAB"
+# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported
+# TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
+# TODO: nova regra para coluna module_name
+# TODO: popular a coluna laboratory_id com os registros de Lab (números)
+# TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
+# TODO: popular a coluna lab_assay_uofm com os registros da coluna unit_of_measure
+
 
 def btn_execute():
     folder_path = tbx_table.get("1.0", "end-1c")
@@ -28,18 +39,25 @@ def btn_execute():
               "Assay sample type": "sample_type",
               "Dispatch": "dispatch_number"}
 
+    col_order = ['hole_number', 'sample_number', 'std_standard_code', 'lab_reference_number',
+                 'analysis_date', 'dispatch_number', 'column_name', 'original_result',
+                 'math_performed', 'action_reason', 'original_element', 'date_imported',
+                 'imported_by', 'original_result_number', 'result_after_math', 'unit_of_measure',
+                 'analytical_technique', 'sample_type', 'lab_element', 'module_name', 'laboratory_id',
+                 'laboratory_name', 'parent_sample_number', 'lab_method_code', 'lab_assay_uofm']
+
     if folder_path == '' or sheet == '' or cols == '':
         messagebox.showerror('Erro', "Por favor, preencha todos os campos!")
     elif len(input_files_list) == 0:
         messagebox.showerror('Erro', f"Não há arquivos .xlsx na pasta {folder_path}.")
     elif len(input_files_list) != len(cols):
-        messagebox.showerror('Erro', f"O número de últimas colunas não é igual ao número de arquivos na pasta {folder_path}.")
+        messagebox.showerror('Erro', f"O número de últimas colunas ({len(cols)}) não é igual ao número de arquivos ({len(input_files_list)}) na pasta {folder_path}.")
     else:
         for in_f, c, out_f in zip(input_files_list, cols, output_files_list):
             df = pd.read_excel(in_f, sheet_name=sheet, header=0, usecols=c)
             stacked = data_handler.stack_data_frame(df, index, rename)
             data_handler.column_name_manipulation(stacked)
-            stacked.to_csv(out_f, encoding='cp1252')
+            stacked.to_csv(out_f, index=False, encoding='cp1252')
         messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
 
 
