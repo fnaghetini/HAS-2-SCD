@@ -1,4 +1,5 @@
 from datetime import date
+import pandas as pd
 
 
 def stack_data_frame(df, index, rename):
@@ -22,7 +23,7 @@ def column_name_manipulation(df):
     df['analytical_technique'] = 'ICPASS'
     df['std_standard_code'] = None
     df['lab_element'] = df['original_element']
-    df['module_name'] = 'DHL'
+    df['module_name'] = df.apply(lambda row: __get_module_name(row), axis=1)
     df['laboratory_id'] = df.apply(lambda row: __make_lab_correspondence(row, 'other'), axis=1)
     df['laboratory_name'] = None
     df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
@@ -54,6 +55,15 @@ def __get_unity_measure_lab(row):
     if element == 'ozt':
         return 'ozt'
     return '%'
+
+
+def __get_module_name(row):
+    if pd.isna(row['hole_number']) and row['sample_type'] in ['OR', 'ASSAY']:
+        return 'SSTN'
+    elif row['sample_type'] in ['STD', 'STANDARD']:
+        return 'STANDARD'
+    else:
+        return 'DHL'
 
 
 def __make_lab_correspondence(row, field='index'):

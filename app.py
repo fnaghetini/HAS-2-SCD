@@ -11,10 +11,8 @@ from idlelib.tooltip import Hovertip
 
 # TODO: popular std_standard_code
 # TODO: nova regra para coluna parent_sample_number
-# TODO: alterar sufixos da coluna column_name para "_LAB"
 # TODO: adicionar 2 segundos para cada novo registro na coluna date_imported
 # TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
-# TODO: nova regra para coluna module_name
 # TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
 
 
@@ -41,7 +39,6 @@ def btn_execute():
                  'imported_by', 'original_result_number', 'result_after_math', 'unit_of_measure',
                  'analytical_technique', 'sample_type', 'lab_element', 'module_name', 'laboratory_id',
                  'laboratory_name', 'parent_sample_number', 'lab_method_code', 'lab_assay_uofm']
-
 
     if folder_path == '' or sheet == '' or cols == '':
         messagebox.showerror('Erro', "Por favor, preencha todos os campos!")
