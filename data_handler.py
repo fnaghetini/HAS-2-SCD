@@ -31,7 +31,8 @@ def column_name_manipulation(df):
 
 
 def __correct_colum_label(row):
-    column_label = row['column_name']
+    splitted_column_name = row['column_name'].split('_')
+    column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
     return column_label
 
 

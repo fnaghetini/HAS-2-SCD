@@ -9,14 +9,13 @@ from idlelib.tooltip import Hovertip
 # ------------------------------------- Função ------------------------------------- #
 ######################################################################################
 
-# TODO: std_standard_code não está presente no script
+# TODO: popular std_standard_code
 # TODO: nova regra para coluna parent_sample_number
 # TODO: alterar sufixos da coluna column_name para "_LAB"
 # TODO: adicionar 2 segundos para cada novo registro na coluna date_imported
 # TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
 # TODO: nova regra para coluna module_name
 # TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
-# TODO: popular a coluna lab_assay_uofm com os registros da coluna unit_of_measure
 
 
 def btn_execute():
