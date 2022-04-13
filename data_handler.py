@@ -20,25 +20,18 @@ def column_name_manipulation(df):
     df['result_after_math'] = df.apply(lambda row: __convert_to_original(row), axis=1)
     df['unit_of_measure'] = df.apply(lambda row: __get_unity_measure(row), axis=1)
     df['analytical_technique'] = 'ICPASS'
-    df['status'] = None
+    df['std_standard_code'] = None
     df['lab_element'] = df['original_element']
     df['module_name'] = 'DHL'
     df['laboratory_id'] = df.apply(lambda row: __make_lab_correspondence(row, 'other'), axis=1)
     df['laboratory_name'] = None
-    df['date_received'] = None
-    df['lab_analytical_method'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
-    df['sample_status'] = None
-    df['lab_method_code'] = df['lab_analytical_method']
-    df['lab_assay_uofm'] = df.apply(lambda row: __get_unity_measure_lab(row), axis=1)
-    df['standard_min_value'] = None
-    df['standard_max_value'] = None
-    df['standard_deviation'] = None
+    df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
+    df['lab_assay_uofm'] = df['unit_of_measure']
     df['column_name'] = df.apply(lambda row: __correct_colum_label(row), axis=1)
 
 
 def __correct_colum_label(row):
     column_label = row['column_name']
-    # column_label  = column_label[:7] + "Lab"
     return column_label
 
 

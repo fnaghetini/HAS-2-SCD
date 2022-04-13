@@ -11,12 +11,10 @@ from idlelib.tooltip import Hovertip
 
 # TODO: std_standard_code não está presente no script
 # TODO: nova regra para coluna parent_sample_number
-# TODO: remover colunas date_shipped, Lab, date_received, lab_analytical_method, sample_status, standard_min_value, standard_max_value, standard_deviation
 # TODO: alterar sufixos da coluna column_name para "_LAB"
 # TODO: adicionar 2 segundos para cada novo registro na coluna date_imported
 # TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
 # TODO: nova regra para coluna module_name
-# TODO: popular a coluna laboratory_id com os registros de Lab (números)
 # TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
 # TODO: popular a coluna lab_assay_uofm com os registros da coluna unit_of_measure
 
@@ -30,9 +28,8 @@ def btn_execute():
 
     index = ["Holeid", "parent_sample_number",
              "Sample number", "Dispatch",
-             "date_shipped", "Assay sample type",
-             "Lab", "lab_reference_number",
-             "analysis_date"]
+             "Assay sample type", "Lab",
+             "lab_reference_number", "analysis_date"]
 
     rename = {"Holeid": "hole_number",
               "Sample number": "sample_number",
@@ -46,6 +43,7 @@ def btn_execute():
                  'analytical_technique', 'sample_type', 'lab_element', 'module_name', 'laboratory_id',
                  'laboratory_name', 'parent_sample_number', 'lab_method_code', 'lab_assay_uofm']
 
+
     if folder_path == '' or sheet == '' or cols == '':
         messagebox.showerror('Erro', "Por favor, preencha todos os campos!")
     elif len(input_files_list) == 0:
@@ -57,7 +55,8 @@ def btn_execute():
             df = pd.read_excel(in_f, sheet_name=sheet, header=0, usecols=c)
             stacked = data_handler.stack_data_frame(df, index, rename)
             data_handler.column_name_manipulation(stacked)
-            stacked.to_csv(out_f, index=False, encoding='cp1252')
+            df_out = stacked[col_order]
+            df_out.to_csv(out_f, index=False, encoding='cp1252')
         messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
 
 
