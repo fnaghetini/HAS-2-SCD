@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import datetime
+from pytz import timezone
 import pandas as pd
 
 
@@ -15,7 +16,7 @@ def column_name_manipulation(df):
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
-    df['date_imported'] = date.today()
+    df['date_imported'] = datetime.now(timezone('America/Sao_Paulo'))
     df['imported_by'] = 'Datamine'
     df['original_result_number'] = df.apply(lambda row: __get_original_value(row), axis=1)
     df['result_after_math'] = df.apply(lambda row: __convert_to_original(row), axis=1)
@@ -61,7 +62,7 @@ def __get_module_name(row):
     if pd.isna(row['hole_number']) and row['sample_type'] in ['OR', 'ASSAY']:
         return 'SSTN'
     elif row['sample_type'] in ['STD', 'STANDARD']:
-        return 'STANDARD'
+        return 'STD'
     else:
         return 'DHL'
 

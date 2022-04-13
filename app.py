@@ -11,7 +11,7 @@ from idlelib.tooltip import Hovertip
 
 # TODO: popular std_standard_code
 # TODO: nova regra para coluna parent_sample_number
-# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported
+# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported (MM/DD/YYYY HH:MM:SS)
 # TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
 # TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
 
