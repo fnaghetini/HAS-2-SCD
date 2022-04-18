@@ -80,7 +80,7 @@ tbx_sheet = Text(root, height=1, width=20, bg='light yellow')
 txt_lastcol = Label(root, text="Últimas Colunas:", bg='white', fg='black', justify=LEFT, anchor='w', padx=10)
 tbx_lastcol = Text(root, height=1, width=20, bg='light yellow')
 btn_exec = Button(root, text="Executar", width=15, command=lambda: btn_execute())
-txt_version = Label(root, text="v0.0.1", bg='white', fg='black', justify=RIGHT, anchor='e')
+txt_version = Label(root, text="v0.0.2", bg='white', fg='black', justify=RIGHT, anchor='e')
 
 # Associando widgets à janela principal
 txt_title.grid(row=0, column=0, columnspan=2, pady=10)
