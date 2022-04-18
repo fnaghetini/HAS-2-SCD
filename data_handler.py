@@ -13,6 +13,8 @@ def stack_data_frame(df, index, rename):
 
 
 def column_name_manipulation(df, dict_methods, dict_labs):
+    df['hole_number'] = df.apply(lambda row: __get_hole_number(row), axis=1)
+    df['std_standard_code'] = df.apply(lambda row: __get_std_standard_code(row), axis=1)
     df['dispatch_number'] = df.apply(lambda row: __get_dispatch_number(row), axis=1)
     df['lab_reference_number'] = df.apply(lambda row: __get_lab_reference_number(row), axis=1)
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
@@ -54,6 +56,20 @@ def __correct_column_label(row):
     splitted_column_name = row['column_name'].split('_')
     column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
     return column_label
+
+
+def __get_hole_number(row):
+    if pd.isna(row['hole_number']):
+        return 'NULL'
+    else:
+        return row['hole_number']
+
+
+def __get_std_standard_code(row):
+    if pd.isna(row['std_standard_code']):
+        return 'NULL'
+    else:
+        return row['std_standard_code']
 
 
 def __get_dispatch_number(row):
