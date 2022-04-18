@@ -10,9 +10,6 @@ from idlelib.tooltip import Hovertip
 ######################################################################################
 
 # TODO: adicionar 2 segundos para cada novo registro na coluna date_imported (MM/DD/YYYY HH:MM:SS AM/PM)
-# TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
-# TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
-
 
 def btn_execute():
     folder_path = tbx_table.get("1.0", "end-1c")
@@ -52,7 +49,7 @@ def btn_execute():
             df_labs = pd.read_excel(in_f, sheet_name='labs', header=0, usecols='A:B', index_col=0)
             dict_labs = df_labs.to_dict(orient='dict')['lab_name']
             stacked = data_handler.stack_data_frame(df, index, rename)
-            data_handler.column_name_manipulation(stacked, dict_labs)
+            data_handler.column_name_manipulation(stacked, dict_methods, dict_labs)
             df_out = stacked[col_order]
             df_out.to_csv(out_f, index=False, encoding='cp1252')
         messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')

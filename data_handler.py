@@ -12,7 +12,7 @@ def stack_data_frame(df, index, rename):
     return df
 
 
-def column_name_manipulation(df, dict_labs):
+def column_name_manipulation(df, dict_methods, dict_labs):
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
@@ -21,15 +21,14 @@ def column_name_manipulation(df, dict_labs):
     df['original_result_number'] = df.apply(lambda row: __get_original_value(row), axis=1)
     df['result_after_math'] = df.apply(lambda row: __convert_to_original(row), axis=1)
     df['unit_of_measure'] = df.apply(lambda row: __get_unity_measure(row), axis=1)
-    df['analytical_technique'] = 'ICPASS'
-    df['std_standard_code'] = None
+    df['analytical_technique'] = df.apply(lambda row: __get_mapped_values(row, 'column_name', dict_methods), axis=1)
     df['lab_element'] = df['original_element']
     df['module_name'] = df.apply(lambda row: __get_module_name(row), axis=1)
-    df['laboratory_name'] = df.apply(lambda row: __get_laboratory_name(row, dict_labs), axis=1)
+    df['laboratory_name'] = df.apply(lambda row: __get_mapped_values(row, 'laboratory_id', dict_labs), axis=1)
     df['parent_sample_number'] = df.apply(lambda row: __get_parent_sample_number(row), axis=1)
     df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
     df['lab_assay_uofm'] = df['unit_of_measure']
-    df['column_name'] = df.apply(lambda row: __correct_colum_label(row), axis=1)
+    df['column_name'] = df.apply(lambda row: __correct_column_label(row), axis=1)
 
 
 def __get_parent_sample_number(row):
@@ -39,7 +38,7 @@ def __get_parent_sample_number(row):
         return row['parent_sample_number']
 
 
-def __correct_colum_label(row):
+def __correct_column_label(row):
     splitted_column_name = row['column_name'].split('_')
     column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
     return column_label
@@ -57,6 +56,12 @@ def __get_unity_measure(row):
     return element
 
 
+def __get_mapped_values(row, column, dic):
+    key = row[column]
+    value = dic[key]
+    return value
+
+
 def __get_unity_measure_lab(row):
     column_label = row['column_name']
     element = column_label.split("_")[1]
@@ -72,11 +77,6 @@ def __get_module_name(row):
         return 'STD'
     else:
         return 'DHL'
-
-
-def __get_laboratory_name(row, map_dict):
-    lab_id = row['laboratory_id']
-    return map_dict[lab_id]
 
 
 def __get_lab_analytical_method(row):
