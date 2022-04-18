@@ -12,7 +12,7 @@ def stack_data_frame(df, index, rename):
     return df
 
 
-def column_name_manipulation(df):
+def column_name_manipulation(df, dict_labs):
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
@@ -25,11 +25,18 @@ def column_name_manipulation(df):
     df['std_standard_code'] = None
     df['lab_element'] = df['original_element']
     df['module_name'] = df.apply(lambda row: __get_module_name(row), axis=1)
-    df['laboratory_id'] = df.apply(lambda row: __make_lab_correspondence(row, 'other'), axis=1)
-    df['laboratory_name'] = None
+    df['laboratory_name'] = df.apply(lambda row: __get_laboratory_name(row, dict_labs), axis=1)
+    df['parent_sample_number'] = df.apply(lambda row: __get_parent_sample_number(row), axis=1)
     df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
     df['lab_assay_uofm'] = df['unit_of_measure']
     df['column_name'] = df.apply(lambda row: __correct_colum_label(row), axis=1)
+
+
+def __get_parent_sample_number(row):
+    if pd.isna(row['parent_sample_number']):
+        return row['sample_number']
+    else:
+        return row['parent_sample_number']
 
 
 def __correct_colum_label(row):
@@ -67,17 +74,9 @@ def __get_module_name(row):
         return 'DHL'
 
 
-def __make_lab_correspondence(row, field='index'):
-    lookup_table = {
-        'ALS':(2, 'ALS'),
-        'INSP':(12, 'Inspectorate'),
-        'NDEF':(23, u'Não Definido'),
-        'SGSPE':(26, u'SGS Perú')
-    }
-    lab = row['Lab']
-    if field == 'index':
-        return lookup_table.get(lab, (0, lab))[0]
-    return lookup_table.get(lab, (0, lab))[1]
+def __get_laboratory_name(row, map_dict):
+    lab_id = row['laboratory_id']
+    return map_dict[lab_id]
 
 
 def __get_lab_analytical_method(row):

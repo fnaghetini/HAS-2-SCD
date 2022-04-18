@@ -9,9 +9,7 @@ from idlelib.tooltip import Hovertip
 # ------------------------------------- Função ------------------------------------- #
 ######################################################################################
 
-# TODO: popular std_standard_code
-# TODO: nova regra para coluna parent_sample_number
-# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported (MM/DD/YYYY HH:MM:SS)
+# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported (MM/DD/YYYY HH:MM:SS AM/PM)
 # TODO: copiar métodos do cabeçalho para gerar os dados da coluna analytical_technique
 # TODO: popular a coluna laboratory_name com os registros da coluna Laboratory da tabela de entrada
 
@@ -20,18 +18,18 @@ def btn_execute():
     folder_path = tbx_table.get("1.0", "end-1c")
     input_files_list = [f.replace('\\', '/') for f in glob(f"{folder_path}/*.xlsx")]
     sheet = tbx_sheet.get("1.0", "end-1c")
-    cols = ["A,B,C,F:" + col for col in tbx_lastcol.get("1.0", "end-1c").split(sep=',')]
+    cols = ["A:" + col for col in tbx_lastcol.get("1.0", "end-1c").split(sep=',')]
     output_files_list = [f[:-5] + '_SCD.csv' for f in input_files_list]
 
-    index = ["Holeid", "parent_sample_number",
-             "Sample number", "Dispatch",
-             "Assay sample type", "Lab",
-             "lab_reference_number", "analysis_date"]
+    index = ["Holeid", "sample_number", "parent_sample_number", "dispatch",
+             "Sample Type", "lab_reference_number", "Laboratory_ID",
+             "assay date", "std_standard_code"]
 
-    rename = {"Holeid": "hole_number",
-              "Sample number": "sample_number",
-              "Assay sample type": "sample_type",
-              "Dispatch": "dispatch_number"}
+    rename = {"Holeid"        : "hole_number",
+              "dispatch"      : "dispatch_number",
+              "Sample Type"   : "sample_type",
+              "Laboratory_ID" : "laboratory_id",
+              "assay date"    : "analysis_date"}
 
     col_order = ['hole_number', 'sample_number', 'std_standard_code', 'lab_reference_number',
                  'analysis_date', 'dispatch_number', 'column_name', 'original_result',
@@ -49,8 +47,12 @@ def btn_execute():
     else:
         for in_f, c, out_f in zip(input_files_list, cols, output_files_list):
             df = pd.read_excel(in_f, sheet_name=sheet, header=0, usecols=c)
+            df_methods = pd.read_excel(in_f, sheet_name='methods', header=0, usecols='A:B', index_col=0)
+            dict_methods = df_methods.to_dict(orient='dict')['method']
+            df_labs = pd.read_excel(in_f, sheet_name='labs', header=0, usecols='A:B', index_col=0)
+            dict_labs = df_labs.to_dict(orient='dict')['lab_name']
             stacked = data_handler.stack_data_frame(df, index, rename)
-            data_handler.column_name_manipulation(stacked)
+            data_handler.column_name_manipulation(stacked, dict_labs)
             df_out = stacked[col_order]
             df_out.to_csv(out_f, index=False, encoding='cp1252')
         messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
