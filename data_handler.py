@@ -13,6 +13,8 @@ def stack_data_frame(df, index, rename):
 
 
 def column_name_manipulation(df, dict_methods, dict_labs):
+    df['dispatch_number'] = df.apply(lambda row: __get_dispatch_number(row), axis=1)
+    df['lab_reference_number'] = df.apply(lambda row: __get_lab_reference_number(row), axis=1)
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
@@ -52,6 +54,20 @@ def __correct_column_label(row):
     splitted_column_name = row['column_name'].split('_')
     column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
     return column_label
+
+
+def __get_dispatch_number(row):
+    if pd.isna(row['dispatch_number']):
+        return 'NULL'
+    else:
+        return row['dispatch_number']
+
+
+def __get_lab_reference_number(row):
+    if pd.isna(row['lab_reference_number']):
+        return 'NULL'
+    else:
+        return row['lab_reference_number']
 
 
 def __get_original_element(row):
@@ -107,6 +123,8 @@ def __check_min_max(row):
         return '/2'
     elif '>' in str(row['original_result']):
         return '*1'
+    else:
+        return 'NULL'
 
 
 def __check_min_max_reason(row):
@@ -114,6 +132,8 @@ def __check_min_max_reason(row):
         return 'abaixo LD'
     elif '>' in str(row['original_result']):
         return 'acima LD'
+    else:
+        return 'NULL'
 
 
 def __get_original_value(row):
