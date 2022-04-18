@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 import pandas as pd
 
@@ -16,7 +16,7 @@ def column_name_manipulation(df, dict_methods, dict_labs):
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
-    df['date_imported'] = datetime.now(timezone('America/Sao_Paulo'))
+    df['date_imported'] = __get_date_imported(df)
     df['imported_by'] = 'Datamine'
     df['original_result_number'] = df.apply(lambda row: __get_original_value(row), axis=1)
     df['result_after_math'] = df.apply(lambda row: __convert_to_original(row), axis=1)
@@ -36,6 +36,16 @@ def __get_parent_sample_number(row):
         return row['sample_number']
     else:
         return row['parent_sample_number']
+
+
+def __get_date_imported(df):
+    index = df.index
+    dates = []
+    for i in index:
+        raw_date = datetime.now(timezone('America/Sao_Paulo')) + i * (timedelta(seconds=2))
+        formated_date = raw_date.strftime("%m/%d/%Y %H:%M:%S") # mm/dd/YYYY HH:MM:SS
+        dates.append(formated_date)
+    return dates
 
 
 def __correct_column_label(row):

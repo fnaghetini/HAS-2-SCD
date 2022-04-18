@@ -9,7 +9,6 @@ from idlelib.tooltip import Hovertip
 # ------------------------------------- Função ------------------------------------- #
 ######################################################################################
 
-# TODO: adicionar 2 segundos para cada novo registro na coluna date_imported (MM/DD/YYYY HH:MM:SS AM/PM)
 
 def btn_execute():
     folder_path = tbx_table.get("1.0", "end-1c")
@@ -42,11 +41,15 @@ def btn_execute():
         messagebox.showerror('Erro', f"O número de últimas colunas ({len(cols)}) não é igual ao número de arquivos ({len(input_files_list)}) na pasta {folder_path}.")
     else:
         for in_f, c, out_f in zip(input_files_list, cols, output_files_list):
+            # Aba sample
             df = pd.read_excel(in_f, sheet_name='sample', header=0, usecols=c)
+            # Aba methods
             df_methods = pd.read_excel(in_f, sheet_name='methods', header=0, usecols='A:B', index_col=0)
             dict_methods = df_methods.to_dict(orient='dict')['method']
+            # Aba labs
             df_labs = pd.read_excel(in_f, sheet_name='labs', header=0, usecols='A:B', index_col=0)
             dict_labs = df_labs.to_dict(orient='dict')['lab_name']
+
             stacked = data_handler.stack_data_frame(df, index, rename)
             data_handler.column_name_manipulation(stacked, dict_methods, dict_labs)
             df_out = stacked[col_order]
