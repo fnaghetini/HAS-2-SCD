@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import datetime, timedelta
+from pytz import timezone
+import pandas as pd
 
 
 def stack_data_frame(df, index, rename):
@@ -10,38 +12,78 @@ def stack_data_frame(df, index, rename):
     return df
 
 
-def column_name_manipulation(df):
-    # standard_code   lab_reference_number    analysis_date   dispatch_number date_shipped
-    # df['standard_code'] = df['Standard id']
+def column_name_manipulation(df, dict_methods, dict_labs):
+    df['hole_number'] = df.apply(lambda row: __get_hole_number(row), axis=1)
+    df['std_standard_code'] = df.apply(lambda row: __get_std_standard_code(row), axis=1)
+    df['dispatch_number'] = df.apply(lambda row: __get_dispatch_number(row), axis=1)
+    df['lab_reference_number'] = df.apply(lambda row: __get_lab_reference_number(row), axis=1)
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
-    df['date_imported'] = date.today()
+    df['date_imported'] = __get_date_imported(df)
     df['imported_by'] = 'Datamine'
     df['original_result_number'] = df.apply(lambda row: __get_original_value(row), axis=1)
     df['result_after_math'] = df.apply(lambda row: __convert_to_original(row), axis=1)
     df['unit_of_measure'] = df.apply(lambda row: __get_unity_measure(row), axis=1)
-    df['analytical_technique'] = 'ICPASS'
-    df['status'] = None
+    df['analytical_technique'] = df.apply(lambda row: __get_mapped_values(row, 'column_name', dict_methods), axis=1)
     df['lab_element'] = df['original_element']
-    df['module_name'] = 'DHL'
-    df['laboratory_id'] = df.apply(lambda row: __make_lab_correspondence(row, 'other'), axis=1)
-    df['laboratory_name'] = None
-    df['date_received'] = None
-    df['lab_analytical_method'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
-    df['sample_status'] = None
-    df['lab_method_code'] = df['lab_analytical_method']
-    df['lab_assay_uofm'] = df.apply(lambda row: __get_unity_measure_lab(row), axis=1)
-    df['standard_min_value'] = None
-    df['standard_max_value'] = None
-    df['standard_deviation'] = None
-    df['column_name'] = df.apply(lambda row: __correct_colum_label(row), axis=1)
+    df['module_name'] = df.apply(lambda row: __get_module_name(row), axis=1)
+    df['laboratory_name'] = df.apply(lambda row: __get_mapped_values(row, 'laboratory_id', dict_labs), axis=1)
+    df['parent_sample_number'] = df.apply(lambda row: __get_parent_sample_number(row), axis=1)
+    df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
+    df['lab_assay_uofm'] = df['unit_of_measure']
+    df['column_name'] = df.apply(lambda row: __correct_column_label(row), axis=1)
 
 
-def __correct_colum_label(row):
-    column_label = row['column_name']
-    # column_label  = column_label[:7] + "Lab"
+def __get_parent_sample_number(row):
+    if pd.isna(row['parent_sample_number']):
+        return row['sample_number']
+    else:
+        return row['parent_sample_number']
+
+
+def __get_date_imported(df):
+    index = df.index
+    dates = []
+    for i in index:
+        raw_date = datetime.now(timezone('America/Sao_Paulo')) + i * (timedelta(seconds=2))
+        formated_date = raw_date.strftime("%m/%d/%Y %H:%M:%S") # mm/dd/YYYY HH:MM:SS
+        dates.append(formated_date)
+    return dates
+
+
+def __correct_column_label(row):
+    splitted_column_name = row['column_name'].split('_')
+    column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
     return column_label
+
+
+def __get_hole_number(row):
+    if pd.isna(row['hole_number']):
+        return 'NULL'
+    else:
+        return row['hole_number']
+
+
+def __get_std_standard_code(row):
+    if pd.isna(row['std_standard_code']):
+        return 'NULL'
+    else:
+        return row['std_standard_code']
+
+
+def __get_dispatch_number(row):
+    if pd.isna(row['dispatch_number']):
+        return 'NULL'
+    else:
+        return row['dispatch_number']
+
+
+def __get_lab_reference_number(row):
+    if pd.isna(row['lab_reference_number']):
+        return 'NULL'
+    else:
+        return row['lab_reference_number']
 
 
 def __get_original_element(row):
@@ -56,6 +98,12 @@ def __get_unity_measure(row):
     return element
 
 
+def __get_mapped_values(row, column, dic):
+    key = row[column]
+    value = dic[key]
+    return value
+
+
 def __get_unity_measure_lab(row):
     column_label = row['column_name']
     element = column_label.split("_")[1]
@@ -64,17 +112,13 @@ def __get_unity_measure_lab(row):
     return '%'
 
 
-def __make_lab_correspondence(row, field='index'):
-    lookup_table = {
-        'ALS':(2, 'ALS'),
-        'INSP':(12, 'Inspectorate'),
-        'NDEF':(23, u'Não Definido'),
-        'SGSPE':(26, u'SGS Perú')
-    }
-    lab = row['Lab']
-    if field == 'index':
-        return lookup_table.get(lab, (0, lab))[0]
-    return lookup_table.get(lab, (0, lab))[1]
+def __get_module_name(row):
+    if pd.isna(row['hole_number']) and row['sample_type'] in ['OR', 'ASSAY']:
+        return 'SSTN'
+    elif row['sample_type'] in ['STD', 'STANDARD']:
+        return 'STD'
+    else:
+        return 'DHL'
 
 
 def __get_lab_analytical_method(row):
@@ -95,6 +139,8 @@ def __check_min_max(row):
         return '/2'
     elif '>' in str(row['original_result']):
         return '*1'
+    else:
+        return 'NULL'
 
 
 def __check_min_max_reason(row):
@@ -102,6 +148,8 @@ def __check_min_max_reason(row):
         return 'abaixo LD'
     elif '>' in str(row['original_result']):
         return 'acima LD'
+    else:
+        return 'NULL'
 
 
 def __get_original_value(row):
