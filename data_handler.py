@@ -54,34 +54,34 @@ def __get_date_imported(df):
 
 def __correct_column_label(row):
     splitted_column_name = row['column_name'].split('_')
-    column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_LAB'
+    column_label = splitted_column_name[0] + '_' + splitted_column_name[1] + '_Lab'
     return column_label
 
 
 def __get_hole_number(row):
     if pd.isna(row['hole_number']):
-        return 'NULL'
+        return ''
     else:
         return row['hole_number']
 
 
 def __get_std_standard_code(row):
     if pd.isna(row['std_standard_code']):
-        return 'NULL'
+        return ''
     else:
         return row['std_standard_code']
 
 
 def __get_dispatch_number(row):
     if pd.isna(row['dispatch_number']):
-        return 'NULL'
+        return ''
     else:
         return row['dispatch_number']
 
 
 def __get_lab_reference_number(row):
     if pd.isna(row['lab_reference_number']):
-        return 'NULL'
+        return ''
     else:
         return row['lab_reference_number']
 
@@ -140,7 +140,7 @@ def __check_min_max(row):
     elif '>' in str(row['original_result']):
         return '*1'
     else:
-        return 'NULL'
+        return ''
 
 
 def __check_min_max_reason(row):
@@ -149,7 +149,7 @@ def __check_min_max_reason(row):
     elif '>' in str(row['original_result']):
         return 'acima LD'
     else:
-        return 'NULL'
+        return ''
 
 
 def __get_original_value(row):
