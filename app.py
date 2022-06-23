@@ -17,8 +17,8 @@ def btn_execute():
     output_files_list = [f[:-5] + '_SCD.csv' for f in input_files_list]
 
     index = ["Holeid", "sample_number", "parent_sample_number", "dispatch",
-             "Sample Type", "lab_reference_number", "Laboratory_ID",
-             "assay date", "std_standard_code"]
+             "date_shipped", "Sample Type", "lab_reference_number",
+             "Laboratory_ID", "assay date", "std_standard_code"]
 
     rename = {"Holeid"        : "hole_number",
               "dispatch"      : "dispatch_number",
@@ -27,7 +27,7 @@ def btn_execute():
               "assay date"    : "analysis_date"}
 
     col_order = ['hole_number', 'sample_number', 'std_standard_code', 'lab_reference_number',
-                 'analysis_date', 'dispatch_number', 'column_name', 'original_result',
+                 'analysis_date', 'date_shipped', 'dispatch_number', 'column_name', 'original_result',
                  'math_performed', 'action_reason', 'original_element', 'date_imported',
                  'imported_by', 'original_result_number', 'result_after_math', 'unit_of_measure',
                  'analytical_technique', 'sample_type', 'lab_element', 'module_name', 'laboratory_id',

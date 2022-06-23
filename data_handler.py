@@ -16,6 +16,7 @@ def column_name_manipulation(df, dict_methods, dict_labs):
     df['hole_number'] = df.apply(lambda row: __get_hole_number(row), axis=1)
     df['std_standard_code'] = df.apply(lambda row: __get_std_standard_code(row), axis=1)
     df['dispatch_number'] = df.apply(lambda row: __get_dispatch_number(row), axis=1)
+    df['date_shipped'] = df.apply(lambda row: __get_date_shipped(row), axis=1)
     df['lab_reference_number'] = df.apply(lambda row: __get_lab_reference_number(row), axis=1)
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
@@ -63,6 +64,13 @@ def __get_hole_number(row):
         return ''
     else:
         return row['hole_number']
+
+
+def __get_date_shipped(row):
+    if pd.isna(row['date_shipped']):
+        return ''
+    else:
+        return row['date_shipped']
 
 
 def __get_std_standard_code(row):
