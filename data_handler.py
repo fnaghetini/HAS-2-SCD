@@ -127,7 +127,7 @@ def __get_lab_analytical_method(row):
     return analytical_method
 
 
-def math_permormance(df):
+def math_performance(df):
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['math_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_result_number'] = df.apply(lambda row: __convert_to_original(row), axis=1)
