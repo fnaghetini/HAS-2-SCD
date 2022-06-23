@@ -54,7 +54,7 @@ def btn_execute():
             data_handler.column_name_manipulation(stacked, dict_methods, dict_labs)
             df_out = stacked[col_order]
             df_out.to_csv(out_f, index=False, encoding='cp1252')
-        messagebox.showinfo('Script Concluído', f'Arquivos gerados com sucesso na pasta {folder_path}.')
+        messagebox.showinfo('Script Concluído', f'Arquivo(s) gerado(s) com sucesso na pasta {folder_path}.')
 
 
 ######################################################################################
@@ -74,7 +74,7 @@ root.geometry("310x180")
 root.configure(background='white')
 
 # Widgets
-txt_title = Label(root, text="Geração Sample Column Details", bg='white', fg='black', font="lucida 12 bold")
+txt_title = Label(root, text="Geração DHL Sample Column Details", bg='white', fg='black', font="lucida 12 bold")
 txt_table = Label(root, text="Diretório das Tabelas:", bg='white', fg='black', justify=LEFT, anchor='w', padx=10)
 tbx_table = Text(root, height=1, width=20, bg='light yellow')
 txt_lastcol = Label(root, text="Últimas Colunas:", bg='white', fg='black', justify=LEFT, anchor='w', padx=10)
