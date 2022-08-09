@@ -121,7 +121,8 @@ def __get_unity_measure_lab(row):
 
 
 def __get_module_name(row):
-    if pd.isna(row['hole_number']) and row['sample_type'] in ['OR', 'ASSAY']:
+    originals = ['OR','ASSAY','DS1/2','DS1/4','MapPoint','Original']
+    if pd.isna(row['hole_number']) and row['sample_type'] in originals:
         return 'SSTN'
     elif row['sample_type'] in ['STD', 'STANDARD']:
         return 'STD'
