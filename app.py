@@ -53,7 +53,7 @@ def btn_execute():
             stacked = data_handler.stack_data_frame(df, index, rename)
             data_handler.column_name_manipulation(stacked, dict_methods, dict_labs)
             df_out = stacked[col_order]
-            df_out.to_csv(out_f, index=False, encoding='cp1252')
+            df_out.to_csv(out_f, index=False, encoding='utf-8', float_format='%.8f')
         messagebox.showinfo('Script Concluído', f'Arquivo(s) gerado(s) com sucesso na pasta {folder_path}.')
 
 
