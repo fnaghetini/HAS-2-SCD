@@ -4,6 +4,7 @@ import pandas as pd
 import data_handler
 from tkinter import messagebox
 from idlelib.tooltip import Hovertip
+from data_handler import __select_directory
 
 ######################################################################################
 # ------------------------------------- Função ------------------------------------- #
@@ -11,7 +12,7 @@ from idlelib.tooltip import Hovertip
 
 
 def btn_execute():
-    folder_path = tbx_table.get("1.0", "end-1c")
+    folder_path = __select_directory()
     input_files_list = [f.replace('\\', '/') for f in glob(f"{folder_path}/*.xlsx")]
     cols = ["A:" + col for col in tbx_lastcol.get("1.0", "end-1c").split(sep=',')]
     output_files_list = [f[:-5] + '_SCD.csv' for f in input_files_list]
@@ -69,30 +70,25 @@ root.wm_iconbitmap('datamine.ico')
 # Título
 root.title("Datamine GDMS")
 # Dimensões da tabela
-root.geometry("310x180")
+root.geometry("310x170")
 # Configuração de background
 root.configure(background='white')
 
 # Widgets
-txt_title = Label(root, text="Geração DHL Sample Column Details", bg='white', fg='black', font="lucida 12 bold")
-txt_table = Label(root, text="Diretório das Tabelas:", bg='white', fg='black', justify=LEFT, anchor='w', padx=10)
-tbx_table = Text(root, height=1, width=20, bg='light yellow')
+txt_title = Label(root, text="  Geração DHL Sample Column Details", bg='white', fg='black', font="lucida 12 bold", justify=CENTER)
 txt_lastcol = Label(root, text="Últimas Colunas:", bg='white', fg='black', justify=LEFT, anchor='w', padx=10)
 tbx_lastcol = Text(root, height=1, width=20, bg='light yellow')
 btn_exec = Button(root, text="Executar", width=15, command=lambda: btn_execute())
-txt_version = Label(root, text="v0.0.2", bg='white', fg='black', justify=RIGHT, anchor='e')
+txt_version = Label(root, text="v0.0.3", bg='white', fg='black', justify=RIGHT, anchor='e')
 
 # Associando widgets à janela principal
-txt_title.grid(row=0, column=0, columnspan=2, pady=10)
-txt_table.grid(row=1, column=0, pady=5, sticky=W)
-tbx_table.grid(row=1, column=1)
-txt_lastcol.grid(row=3, column=0, pady=5, sticky=W)
-tbx_lastcol.grid(row=3, column=1)
-btn_exec.grid(row=4, column=0, columnspan=2, pady=10)
-txt_version.grid(row=5, column=1, sticky=E)
+txt_title.grid(row=0, column=0, columnspan=2, pady=20)
+txt_lastcol.grid(row=2, column=0, pady=5, sticky=W)
+tbx_lastcol.grid(row=2, column=1)
+btn_exec.grid(row=3, column=0, columnspan=2, pady=10)
+txt_version.grid(row=4, column=1, sticky=E)
 
 # Tooltips
-tip_table = Hovertip(tbx_table, "Caminho para a pasta \nque contém as tabelas \nde entrada.")
 tip_lastcols = Hovertip(tbx_lastcol, "Nomes das últimas colunas \nseparados por vírgula. \nExemplo: AT,R,AV,AV,AS.")
 
 # Execução do app

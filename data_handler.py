@@ -1,6 +1,12 @@
 from datetime import datetime, timedelta
 from pytz import timezone
 import pandas as pd
+from tkinter import filedialog
+
+
+def __select_directory():
+    folderpath = filedialog.askdirectory(initialdir='/', title='Selecione uma Pasta')
+    return folderpath
 
 
 def stack_data_frame(df, index, rename):
