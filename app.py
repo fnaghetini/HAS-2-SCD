@@ -65,12 +65,10 @@ def btn_execute():
 # Criação da janela principal
 root = Tk()
 
-# Ícone
-root.wm_iconbitmap('datamine.ico')
 # Título
 root.title("Datamine GDMS")
 # Dimensões da tabela
-root.geometry("310x170")
+root.geometry("310x190")
 # Configuração de background
 root.configure(background='white')
 
@@ -85,7 +83,7 @@ txt_version = Label(root, text="v0.0.3", bg='white', fg='black', justify=RIGHT, 
 txt_title.grid(row=0, column=0, columnspan=2, pady=20)
 txt_lastcol.grid(row=2, column=0, pady=5, sticky=W)
 tbx_lastcol.grid(row=2, column=1)
-btn_exec.grid(row=3, column=0, columnspan=2, pady=10)
+btn_exec.grid(row=3, column=0, columnspan=2, pady=20)
 txt_version.grid(row=4, column=1, sticky=E)
 
 # Tooltips
