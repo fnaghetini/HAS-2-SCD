@@ -127,11 +127,11 @@ def __get_unity_measure_lab(row):
 
 
 def __get_module_name(row):
-    originals = ['OR','ASSAY','DS1/2','DS1/4','MapPoint','Original']
-    if row['hole_number'] == '' and row['sample_type'] in originals:
-        return 'SSTN'
-    elif row['sample_type'] in ['STD', 'STANDARD']:
+    std_codes = ['STD', 'STANDARD']
+    if row['sample_type'] in std_codes:
         return 'STD'
+    elif row['hole_number'] == '' and row['sample_type'] not in std_codes:
+        return 'SSTN'
     else:
         return 'DHL'
 
