@@ -24,6 +24,7 @@ def column_name_manipulation(df, dict_methods, dict_labs):
     df['dispatch_number'] = df.apply(lambda row: __get_dispatch_number(row), axis=1)
     df['date_shipped'] = df.apply(lambda row: __get_date_shipped(row), axis=1)
     df['lab_reference_number'] = df.apply(lambda row: __get_lab_reference_number(row), axis=1)
+    df['analysis_date'] = df.apply(lambda row: __get_analysis_date(row), axis=1)
     df['math_performed'] = df.apply(lambda row: __check_min_max(row), axis=1)
     df['action_reason'] = df.apply(lambda row: __check_min_max_reason(row), axis=1)
     df['original_element'] = df.apply(lambda row: __get_original_element(row), axis=1)
@@ -47,6 +48,13 @@ def __get_parent_sample_number(row):
         return row['sample_number']
     else:
         return row['parent_sample_number']
+
+
+def __get_analysis_date(row):
+    if pd.isna(row['analysis_date']):
+        return ''
+    else:
+        return row['analysis_date'].strftime("%m/%d/%Y")
 
 
 def __get_date_imported(df):
@@ -76,7 +84,7 @@ def __get_date_shipped(row):
     if pd.isna(row['date_shipped']):
         return ''
     else:
-        return row['date_shipped']
+        return row['date_shipped'].strftime("%m/%d/%Y")
 
 
 def __get_std_standard_code(row):
