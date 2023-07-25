@@ -54,7 +54,7 @@ def __get_analysis_date(row):
     if pd.isna(row['analysis_date']):
         return ''
     else:
-        return row['analysis_date'].strftime("%m/%d/%Y")
+        return row['analysis_date'].strftime("%d/%m/%Y")
 
 
 def __get_date_imported(df):
@@ -84,7 +84,7 @@ def __get_date_shipped(row):
     if pd.isna(row['date_shipped']):
         return ''
     else:
-        return row['date_shipped'].strftime("%m/%d/%Y")
+        return row['date_shipped'].strftime("%d/%m/%Y")
 
 
 def __get_std_standard_code(row):
