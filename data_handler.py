@@ -62,7 +62,7 @@ def __get_date_imported(df):
     dates = []
     for i in index:
         raw_date = datetime.now(timezone('America/Sao_Paulo')) + i * (timedelta(seconds=2))
-        formated_date = raw_date.strftime("%m/%d/%Y %H:%M:%S") # mm/dd/YYYY HH:MM:SS
+        formated_date = raw_date.strftime("%Y-%m-%d %H:%M:%S") # YYYY/mm/dd HH:MM:SS
         dates.append(formated_date)
     return dates
 
