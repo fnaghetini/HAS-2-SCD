@@ -27,7 +27,7 @@ def btn_execute():
               "Laboratory_ID" : "laboratory_id",
               "assay date"    : "analysis_date"}
 
-    col_order = ['hole_number', 'sample_number', 'std_standard_code', 'lab_reference_number',
+    col_order = ['hole_number', 'sample_number', 'std_standard_code', 'file_sample_type', 'lab_reference_number',
                  'analysis_date', 'date_shipped', 'dispatch_number', 'column_name', 'original_result',
                  'math_performed', 'action_reason', 'original_element', 'date_imported',
                  'imported_by', 'original_result_number', 'result_after_math', 'unit_of_measure',

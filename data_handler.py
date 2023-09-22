@@ -41,6 +41,7 @@ def column_name_manipulation(df, dict_methods, dict_labs):
     df['lab_method_code'] = df.apply(lambda row: __get_lab_analytical_method(row), axis=1)
     df['lab_assay_uofm'] = df['unit_of_measure']
     df['column_name'] = df.apply(lambda row: __correct_column_label(row), axis=1)
+    df['file_sample_type'] = df.apply(lambda row: __get_file_sample_type(row), axis=1)
 
 
 def __get_parent_sample_number(row):
@@ -189,3 +190,14 @@ def __convert_to_original(row):
     elif '>' in str(value):
         value = float(value[1:])
     return value
+
+
+def __get_file_sample_type(row):
+    if row['sample_type'] in ['ASSAY', 'CDUP', 'CHECK', 'FDUP', 'STANDARD']:
+        return 'A'
+    elif row['sample_type'] == 'ADUPLAB':
+        return 'D'
+    elif row['sample_type'] == 'PDUPLAB':
+        return 'P'
+    else:
+        return ''
